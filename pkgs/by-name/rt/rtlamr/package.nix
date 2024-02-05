@@ -1,0 +1,28 @@
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
+
+buildGoModule rec {
+  pname = "rtlamr";
+  version = "0.9.3";
+
+  src = fetchFromGitHub {
+    owner = "bemasher";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-0LufLU/wTmCRqTnQBNJg5UnDv0u1Thec5FSWATWqZsQ=";
+  };
+  vendorHash = "sha256-uT6zfsWgIot0EMNqwtwJNFXN/WaAyOGfcYJjuyOXT4g=";
+
+  excludedPackages = ["misc"];
+
+  meta = with lib; {
+    description = "An rtl-sdr receiver for Itron ERT compatible smart meters operating in the 900MHz ISM band";
+    homepage = "https://github.com/bemasher/${pname}";
+    changelog = "https://github.com/bemasher/${pname}/releases/tag/v${version}";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ jhollowe ];
+    mainProgram = "rtlamr";
+  };
+}
