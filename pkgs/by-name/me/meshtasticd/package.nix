@@ -6,6 +6,9 @@
 , platformio
 , python3
 , git
+, libgpiod
+, pkg-config
+, cacert
 }:
 
 
@@ -17,21 +20,49 @@ stdenv.mkDerivation rec {
   version = "2.3.3.8187fa7";
 
   src = fetchFromGitHub {
-    owner = "meshtastic";
+    # owner = "meshtastic";
+    owner = "jhollowe-forks"; # TODO remove once done testing
     repo = "firmware";
     rev = "v${version}";
     # hash = lib.fakeHash;
     hash = "sha256-oP6wmzo4qp8sFusWVOYL+FRL1C+iny3G/d0cS+CrSD8=";
   };
 
+  # used only during build
   nativeBuildInputs = [
     python3
     platformioBundled
-    git
+    # git
+    pkg-config
+    libgpiod
+    cacert # required for SSL certs used by git when pulling HTTPS repos for platformio
+  ];
+
+  # used during runtime
+  buildInputs = [
+  ];
+
+  patches = [
+    ./include_gpiod.patch
   ];
 
   buildPhase = ''
-    ./bin/build-native.sh
+    set -e
+
+    cat platformio.ini
+
+    export VERSION=${version}
+    export SHORT_VERSION=$(bin/buildinfo.py short)
+
+
+    export GPIOD_INCLUDE=${libgpiod.outPath}/include
+    env | sort
+
+    pio run --environment native
+    # echo GCC
+    # echo | gcc -E -Wp,-v -
+    # echo G++
+    # echo | g++ -E -Wp,-v -
 
     mkdir -p $out
     cp -r release/* $out

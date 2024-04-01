@@ -1,0 +1,13 @@
+diff --git a/platformio.ini b/platformio.ini
+index 2c373ab00..7728a646c 100644
+--- a/platformio.ini
++++ b/platformio.ini
+@@ -46,7 +46,7 @@ extra_scripts = bin/platformio-custom.py
+ ; The Radiolib stuff will speed up building considerably. Exclud all the stuff we dont need.
+ build_flags = -Wno-missing-field-initializers
+   -Wno-format
+-  -Isrc -Isrc/mesh -Isrc/mesh/generated -Isrc/gps -Isrc/buzz -Wl,-Map,.pio/build/output.map
++  -Isrc -Isrc/mesh -Isrc/mesh/generated -Isrc/gps -Isrc/buzz -I$GPIOD_INCLUDE -Wl,-Map,.pio/build/output.map
+   -DUSE_THREAD_NAMES
+   -DTINYGPS_OPTION_NO_CUSTOM_FIELDS
+   -DPB_ENABLE_MALLOC=1
