@@ -28140,6 +28140,8 @@ with pkgs;
 
   mdevctl = callPackage ../os-specific/linux/mdevctl { };
 
+  meshtasticd = callPackage ../by-name/me/meshtasticd/package.nix { };
+
   metastore = callPackage ../os-specific/linux/metastore { };
 
   minimal-bootstrap = recurseIntoAttrs (import ../os-specific/linux/minimal-bootstrap {

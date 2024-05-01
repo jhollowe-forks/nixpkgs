@@ -1,0 +1,13 @@
+diff --git a/platformio.ini b/platformio.ini
+index 2c373ab00..7728a646c 100644
+--- a/platformio.ini
++++ b/platformio.ini
+@@ -47,6 +47,8 @@ extra_scripts = bin/platformio-custom.py
+ build_flags = -Wno-missing-field-initializers
+   -Wno-format
+   -Isrc -Isrc/mesh -Isrc/mesh/generated -Isrc/gps -Isrc/buzz -Wl,-Map,.pio/build/output.map
++  -IGPIOD_STORE_PATH/include -IYAML_CPP_STORE_PATH/include -IBLUEZ_DEV_STORE_PATH/include
++  -LGPIOD_STORE_PATH/lib -LYAML_CPP_STORE_PATH/lib -LBLUEZ_STORE_PATH/lib
+   -DUSE_THREAD_NAMES
+   -DTINYGPS_OPTION_NO_CUSTOM_FIELDS
+   -DPB_ENABLE_MALLOC=1
