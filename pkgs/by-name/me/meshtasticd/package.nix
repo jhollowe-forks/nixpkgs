@@ -45,9 +45,6 @@ stdenv.mkDerivation rec {
 
   # used during runtime
   buildInputs = [
-    libgpiod
-    yaml-cpp
-    bluez
   ];
 
   patches = [
@@ -69,9 +66,9 @@ stdenv.mkDerivation rec {
 
     pio run --environment native
 
-    mkdir -p $out/native $out/bin
-    cp -r .pio/build/native/* $out/native
-    cd $out/bin/ && ln -s ../native/program meshtasticd
+    mkdir -p $out $out/bin
+    cp .pio/build/native/program $out/bin/meshtasticd
+    cp bin/config-dist.yaml $out/config_base.yaml
   '';
 
   # patchelf complains when it finds the ESP32 binaries which are run by the portduino "emulator"
