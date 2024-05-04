@@ -22,11 +22,9 @@ stdenv.mkDerivation rec {
   version = "2.3.6.7a3570a";
 
   src = fetchFromGitHub {
-    # owner = "meshtastic";
-    owner = "jhollowe-forks"; # TODO remove once done testing
+    owner = "meshtastic";
     repo = "firmware";
     rev = "v${version}";
-    # hash = lib.fakeHash; # TODO remove once done testing
     hash = "sha256-K0kraX2vtQA5QW/r4hSgM83cgsyMjgPFfXhkeXPOaJs=";
   };
 
@@ -59,6 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
     set -e
 
     export VERSION=${version}
@@ -66,9 +65,26 @@ stdenv.mkDerivation rec {
 
     pio run --environment native
 
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out $out/bin
     cp .pio/build/native/program $out/bin/meshtasticd
     cp bin/config-dist.yaml $out/config_base.yaml
+
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    timeout 1 $out/bin/meshtasticd | grep '//\ E S H T /\ S T / C' >/dev/null
+
+    runHook postInstallCheck
   '';
 
   # patchelf complains when it finds the ESP32 binaries which are run by the portduino "emulator"
@@ -79,9 +95,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Allows using a LoRa module/HAT connected to a local SPI port to act as a meshtastic device";
     changelog = "https://github.com/platformio/platformio-core/releases/tag/v${version}";
-    homepage = "https://github.com/librtlsdr/librtlsdr";
+    homepage = "https://meshtastic.org/docs/software/linux-native/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jhollowe ];
     platforms = platforms.linux;
+    mainProgram = "meshtasticd";
   };
 }
