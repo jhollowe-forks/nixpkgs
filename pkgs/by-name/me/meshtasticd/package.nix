@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "meshtasticd";
-  version = "2.3.6.7a3570a";
+  version = "2.4.1.394e0e1";
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "firmware";
     rev = "v${version}";
-    hash = "sha256-K0kraX2vtQA5QW/r4hSgM83cgsyMjgPFfXhkeXPOaJs=";
+    hash = "sha256-siwuH4WpWpJyax9PN6zKxEoUtLhseaoGwnx5VkeMt1s=";
   };
 
   # used only during build
