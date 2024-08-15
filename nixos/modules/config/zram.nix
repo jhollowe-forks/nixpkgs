@@ -60,6 +60,17 @@ in
         '';
       };
 
+      memoryEquation = lib.mkOption {
+        default = null;
+        type = with lib.types; nullOr str;
+        description = lib.mdDoc ''
+          Maximum total amount of memory that can be stored in the zram swap devices.
+          This doesn't define how much memory will be used by the zram swap devices.
+          Arithmetic operators (^%/*-+), e, π, SI suffixes, log(), int(), ceil(),
+          floor(), round(), abs(), min(), max(), and trigonometric functions are supported.
+        '';
+      };
+
       priority = lib.mkOption {
         default = 5;
         type = lib.types.int;
@@ -113,7 +124,7 @@ in
           name = dev;
           value =
             let
-              size = "${toString cfg.memoryPercent} / 100 * ram";
+              size = if cfg.memoryEquation != null then cfg.memoryEquation else "${toString cfg.memoryPercent} / 100 * ram";
             in
             {
               zram-size = if cfg.memoryMax != null then "min(${size}, ${toString cfg.memoryMax} / 1024 / 1024)" else size;
